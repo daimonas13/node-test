@@ -20,8 +20,9 @@ jobs:
       run: echo "::set-env name=PACKAGE_VERSION::$(date +'%Y.%m.%d').$GITHUB_RUN_NUMBER"
     
     - name: Build and Package Website
-      run: gh repo clone daimonas13/node-test 
+      run: https://github.com/daimonas13/node-test.git
       
+
 
        
    
