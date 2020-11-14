@@ -30,18 +30,28 @@ jobs:
       env:
         CI: true
     
-         
+    
+   
     - name: Install Octopus CLI
       run: |
+        mkdir -p ./packages/src/
+
         sudo apt update && sudo apt install --no-install-recommends gnupg curl ca-certificates apt-transport-https && \
         curl -sSfL https://apt.octopus.com/public.key | sudo apt-key add - && \
         sudo sh -c "echo deb https://apt.octopus.com/ stable main > /etc/apt/sources.list.d/octopus.com.list" && \
         sudo apt update && sudo apt install octopuscli
-        
-    - name: Package Andreas-test
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.0
+      with:
+       name: Andreas-test
+    # A file, directory or wildcard pattern that describes what to upload
+       path: 
+         packages/src 
+    
+    - name: Upload
+ 
       run: |
-        mkdir -p ./packages/src/
-        cp -r ./daimonas13/node-test package.json ./packages/src
+        
     
         octo pack --id="Andreas-test" --format="Zip" --version="$PACKAGE_VERSION" --basePath="./packages/src" --outFolder="./packages"
         
