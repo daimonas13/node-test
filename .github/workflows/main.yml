@@ -41,7 +41,7 @@ jobs:
     - name: Package Andreas-test
       run: |
         mkdir -p ./packages/src/
-        cp -r . package.json ./packages/src
+        cp -r ./daimonas13/node-test package.json ./packages/src
     
         octo pack --id="Andreas-test" --format="Zip" --version="$PACKAGE_VERSION" --basePath="./packages/src" --outFolder="./packages"
         
