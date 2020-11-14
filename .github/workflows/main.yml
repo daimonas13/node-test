@@ -16,6 +16,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Set version
+      run: echo "::set-env name=PACKAGE_VERSION::$(date +'%Y.%m.%d').$GITHUB_RUN_NUMBER"
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
@@ -26,20 +28,22 @@ jobs:
         npm test
       env:
         CI: true
+    
+         
+    - name: Install Octopus CLI
+      run: |
+        sudo apt update && sudo apt install --no-install-recommends gnupg curl ca-certificates apt-transport-https && \
+        curl -sSfL https://apt.octopus.com/public.key | sudo apt-key add - && \
+        sudo sh -c "echo deb https://apt.octopus.com/ stable main > /etc/apt/sources.list.d/octopus.com.list" && \
+        sudo apt update && sudo apt install octopuscli
+        
+    - name: Package Andreas-test
+      run: |
+        mkdir -p ./packages/src/
+        cp ./package.json
+        octo pack --id="Andreas-test" --format="Zip" --version="$PACKAGE_VERSION" --basePath="./packages/src" --outFolder="./packages"
+        
+    - name: Push Andreas-test to Octopus
+      run: octo push --package="./packages/Andreas-test.$PACKAGE_VERSION.zip" --server="${{ secrets.OCTOPUS_SERVER_URL }}" --apiKey="${{ secrets.OCTOPUS_API_KEY }}"
 
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: SSH and deploy node app
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
-        port: ${{ secrets.SSH_PORT }}
-        script: |
-          cd ~/node-github-demo
-          git pull origin master
-          npm install --production
-          pm2 restart node-app
+    
