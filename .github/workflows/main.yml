@@ -20,7 +20,7 @@ jobs:
       run: echo "::set-env name=PACKAGE_VERSION::$(date +'%Y.%m.%d').$GITHUB_RUN_NUMBER"
     
     - name: Build and Package Website
-      run: npm build node-test
+      run: npm build /home/runner/work/node-test/package.json
    
 
       
