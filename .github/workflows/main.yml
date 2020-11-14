@@ -40,7 +40,7 @@ jobs:
     - name: Package Andreas-test
       run: |
         mkdir -p ./packages/src/
-        cp ./package.json
+        cp ./node-test/package.json
         octo pack --id="Andreas-test" --format="Zip" --version="$PACKAGE_VERSION" --basePath="./packages/src" --outFolder="./packages"
         
     - name: Push Andreas-test to Octopus
