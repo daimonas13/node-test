@@ -40,7 +40,7 @@ jobs:
         octo pack --id="Andreas-test" --format="Zip" --basePath="./node-test" --outFolder="./packages"
         
     - name: Push Andreas-test to Octopus
-      run: octo push --package="./packages/Andreas-test.$PACKAGE_VERSION.zip" --server="${{ secrets.OCTOPUS_SERVER_URL }}" --apiKey="${{ secrets.OCTOPUS_API_KEY }}"
+      run: octo push --package="./packages/Andreas-test --server="${{ secrets.OCTOPUS_SERVER_URL }}" --apiKey="${{ secrets.OCTOPUS_API_KEY }}"
       
 
 
